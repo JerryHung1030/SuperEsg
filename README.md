@@ -25,8 +25,10 @@ Detailed instructions for use are as follows :
 
 __General purpose__
 
+```
 (MON)      : Automatically fill in the previous Saturday and Sunday and today's forms.
 (TUE->FRI) : Automatically fill in today's forms.
+```
 
 ```
     # double click ESGKiller.exe in the folder dist/
