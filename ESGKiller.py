@@ -25,9 +25,9 @@ def validate(date_text):
 
 # set default value
 specifiedDate = False
-browser = webdriver.Chrome(ChromeDriverManager().install() )
 options = webdriver.ChromeOptions()
 options.headless = True
+browser = webdriver.Chrome(ChromeDriverManager().install(), options=options )
 formCount = 0
 if (datetime.today().isoweekday() == 1) :
     howManyDaysBeforeShouldBeFillin = 2
@@ -35,17 +35,21 @@ else :
     howManyDaysBeforeShouldBeFillin = 0
 
 # set arguments
-for i in range(1, len(sys.argv)):
+for i in range(1, len(sys.argv), 2):
+    #print(i)
+    #print(sys.argv[i])
     if (sys.argv[i] == '-days') :
+        print("Info : specify " + sys.argv[i+1] + " days should be filled in......")
         howManyDaysBeforeShouldBeFillin = int(sys.argv[i+1])-1
-        i += 1
+        continue
     elif (sys.argv[i] == '-specify') :
+        print("Info : specify the date" + sys.argv[i+1] + "......")
         validate(sys.argv[i+1])
         specifiedDate = True
-        i += 1
+        continue
     else :
         print('Error : Arguments input Error......')
-        os._exit()
+        os._exit(1)
     '''
     elif (sys.argv[i] == '-browser') :
         if (sys.argv[i+1] == 's')
@@ -61,22 +65,21 @@ for i in range(1, len(sys.argv)):
 
 # fill in 0-2 form(s)
 while (howManyDaysBeforeShouldBeFillin >= 0) :
-    print('Open browser...')
-    print('Start to fillin form...')
-
     url = "http://eepsrv/JQWebClient/RWDMainFlowPage.aspx?"
     browser.get(url)
 
+    print("Info : login EEP......")
     # log in esp
     loginButton = browser.find_element("xpath", "//*[@id='ok']")
     loginButton.click()
     WebDriverWait(browser, 20).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='collapse_0']/div/div/div[10]/a"))).click()
-    print('Login Seccussfully...')
+    print("Info : Login Seccussfully......")
 
     # change iframe into iframe
     esgiframe = browser.find_element(By.CSS_SELECTOR, "#menu_92 > iframe")
     browser.switch_to.frame(esgiframe)
 
+    print("Info : Get all the elements......")
     # get all elements
     date = browser.find_element("id","dfMaster_date")
     plasticBag = browser.find_element("id","dfMaster_e1_1")
@@ -96,6 +99,7 @@ while (howManyDaysBeforeShouldBeFillin >= 0) :
     bottle = browser.find_element("id","dfMaster_d7_2")
 
     # get date info
+    print("Info : Check date information......")
     if ( specifiedDate ) :
         fillInDate = sys.argv[1]
     else :
@@ -106,7 +110,7 @@ while (howManyDaysBeforeShouldBeFillin >= 0) :
         fillInDate = year+'-'+month+'-'+day
 
     # fill in
-    print('Start fillIn random data...')
+    print("Info : Start to fillIn random data......")
     hover_clear_fillIn(browser, date, fillInDate)
     hover_clear_fillIn(browser, plasticBag, random.randint(0,1))
     hover_clear_fillIn(browser, plasticCup, random.randint(0,1))
@@ -134,13 +138,13 @@ while (howManyDaysBeforeShouldBeFillin >= 0) :
         browser.execute_script("arguments[0].click();", walk)
     if ( random.randint(0,1) ) :
         browser.execute_script("arguments[0].click();", offLight)
-    print('finish fillin form...')    
+    print("Info : Start to submit......")
 
     submitBtn = browser.find_element("xpath", "//*[@id='dfMaster']/div/div/div[3]/button[2]")
     submitBtn.click()
-    print('Submit form Seccussfully...')
+    print("Info : Submit Successfully......")
 
-    time.sleep(10)
-    print('Close the browser...')
+    #time.sleep(10)
+    print("Info : Closing browser......")
     browser.quit()
     howManyDaysBeforeShouldBeFillin -= 1
