@@ -36,8 +36,8 @@ else :
 
 # set arguments
 for i in range(1, len(sys.argv)):
-    if (sys.argv[i] == '-daysbefore') :
-        howManyDaysBeforeShouldBeFillin = int(sys.argv[i+1])
+    if (sys.argv[i] == '-days') :
+        howManyDaysBeforeShouldBeFillin = int(sys.argv[i+1])-1
         i += 1
     elif (sys.argv[i] == '-specify') :
         validate(sys.argv[i+1])
