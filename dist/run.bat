@@ -1,1 +1,0 @@
-.\ESGKiller.exe -days 5
