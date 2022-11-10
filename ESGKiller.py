@@ -29,6 +29,7 @@ options = webdriver.ChromeOptions()
 options.headless = True
 browser = webdriver.Chrome(ChromeDriverManager().install(), options=options )
 formCount = 0
+
 if (datetime.today().isoweekday() == 1) :
     howManyDaysBeforeShouldBeFillin = 2
 else :
@@ -45,26 +46,31 @@ for i in range(1, len(sys.argv), 2):
     elif (sys.argv[i] == '-specify') :
         print("Info : specify the date" + sys.argv[i+1] + "......")
         validate(sys.argv[i+1])
+        fillInDate = sys.argv[i+1]
         specifiedDate = True
         continue
     else :
         print('Error : Arguments input Error......')
         os._exit(1)
-    '''
-    elif (sys.argv[i] == '-browser') :
-        if (sys.argv[i+1] == 's')
-            browser = webdriver.Safari()
-        elif (sys.args[i+1] == 'c') :
-            browser = webdriver.Chrome(ChromeDriverManager().install() )
-        else :
-            print('Error : Brower Setting Error......')
-            os._exit()
-        i += 1
-    '''
 
 
 # fill in 0-2 form(s)
 while (howManyDaysBeforeShouldBeFillin >= 0) :
+
+    # get date info
+    print("Info : Check date information......")
+    if ( not specifiedDate ) :
+        now = datetime.now() 
+        year = now.strftime("%Y")
+        month = now.strftime("%m")
+        day = str(int(now.strftime("%d"))-howManyDaysBeforeShouldBeFillin)
+        print(day)
+        if ( int(day) > 0 and int(day) < 10) :
+            day = '0' + day
+        fillInDate = year+'-'+month+'-'+day
+    print(day)
+    print(fillInDate)
+    
     url = "http://eepsrv/JQWebClient/RWDMainFlowPage.aspx?"
     browser.get(url)
 
@@ -97,18 +103,7 @@ while (howManyDaysBeforeShouldBeFillin >= 0) :
     receipt = browser.find_element("id","dfMaster_d8_2")
     glassBottle = browser.find_element("id","dfMaster_d7_1")
     bottle = browser.find_element("id","dfMaster_d7_2")
-
-    # get date info
-    print("Info : Check date information......")
-    if ( specifiedDate ) :
-        fillInDate = sys.argv[1]
-    else :
-        now = datetime.now() 
-        year = now.strftime("%Y")
-        month = now.strftime("%m")
-        day = str(int(now.strftime("%d"))-howManyDaysBeforeShouldBeFillin)
-        fillInDate = year+'-'+month+'-'+day
-
+    
     # fill in
     print("Info : Start to fillIn random data......")
     hover_clear_fillIn(browser, date, fillInDate)

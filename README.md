@@ -21,6 +21,7 @@ This project will automatically fill in the "Love Earth Diary" of cdri esp.
 ```
 20221023 v1.0 - provide basic functions.
 20221027 v1.1 - add two args (-speficy yyyy-nn-dd, -days [1-5] ).
+20221110 v1.2 - fix some bugs
 ```
 
 ## Run
